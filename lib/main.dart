@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:moc_4_2026/cart_screen/cart_screen.dart';
 import 'package:moc_4_2026/models/product.dart';
 import 'package:moc_4_2026/product_detail_screen/product_detail_screen.dart';
 import 'package:moc_4_2026/products_screen.dart';
@@ -13,8 +14,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        colorSchemeSeed: Colors.deepPurple,
+        useMaterial3: true,
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+        ),
+      ),
       routes: {
-        '/': (context) => ProductsScreen(),
+        '/': (context) => const ProductsScreen(),
       },
       onGenerateRoute: (settings) {
         Widget page = Container();
@@ -25,6 +34,8 @@ class MyApp extends StatelessWidget {
             if (param is Product) {
               page = ProductDetailScreen(product: param);
             }
+          case '/cartScreen':
+            page = const CartScreen();
         }
 
         return MaterialPageRoute(builder: (context) => page);
