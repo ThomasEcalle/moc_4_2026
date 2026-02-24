@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moc_4_2026/blocs/cart_bloc/cart_bloc.dart';
 import 'package:moc_4_2026/models/product.dart';
 
 class ProductDetailScreen extends StatelessWidget {
@@ -88,7 +90,7 @@ class ProductDetailScreen extends StatelessWidget {
                 height: 56,
                 child: FilledButton.icon(
                   onPressed: () {
-                    // TODO: Add to cart logic with Bloc
+                    BlocProvider.of<CartBloc>(context).add(AddToCart(product));
                   },
                   icon: const Icon(Icons.add_shopping_cart),
                   label: const Text('Add to cart'),

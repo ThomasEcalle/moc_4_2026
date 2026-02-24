@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moc_4_2026/blocs/cart_bloc/cart_bloc.dart';
 import 'package:moc_4_2026/blocs/products_bloc/products_bloc.dart';
 import 'package:moc_4_2026/cart_screen/cart_screen.dart';
 import 'package:moc_4_2026/models/product.dart';
@@ -15,8 +16,15 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => ProductsBloc(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => ProductsBloc(),
+        ),
+        BlocProvider(
+          create: (context) => CartBloc(),
+        ),
+      ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
