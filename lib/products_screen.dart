@@ -45,17 +45,21 @@ class _ProductsScreenState extends State<ProductsScreen> {
       ),
       body: BlocBuilder<ProductsBloc, ProductsState>(
         builder: (context, state) {
-          return _buildList(state.products);
+          return switch (state.status) {
+            ProductsStatus.initial || ProductsStatus.loading => _buildLoading(),
+            ProductsStatus.success => _buildList(state.products),
+          };
         },
       ),
     );
   }
 
-  // Widget _buildLoading() {
-  //   return const Center(
-  //     child: CircularProgressIndicator(),
-  //   );
-  // }
+  Widget _buildLoading() {
+    return const Center(
+      child: CircularProgressIndicator(),
+    );
+  }
+
   //
   // Widget _buildError(String message) {
   //   return Center(

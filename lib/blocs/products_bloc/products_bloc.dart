@@ -11,6 +11,8 @@ part 'products_state.dart';
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
   ProductsBloc() : super(ProductsState()) {
     on<GetProducts>((event, emit) async {
+      emit(ProductsState(status: ProductsStatus.loading));
+
       await Future.delayed(const Duration(seconds: 2));
       final response = await http.get(
         Uri.parse('https://dummyjson.com/products'),
@@ -20,7 +22,13 @@ class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
         final json = jsonDecode(response.body) as Map<String, dynamic>;
         final productsJson = json['products'] as List<dynamic>;
         final products = productsJson.map((e) => Product.fromJson(e as Map<String, dynamic>)).toList();
-        emit(ProductsState(products: products));
+
+        emit(
+          ProductsState(
+            products: products,
+            status: ProductsStatus.success,
+          ),
+        );
       }
     });
   }
