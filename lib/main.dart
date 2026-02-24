@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moc_4_2026/blocs/products_bloc/products_bloc.dart';
 import 'package:moc_4_2026/cart_screen/cart_screen.dart';
 import 'package:moc_4_2026/models/product.dart';
 import 'package:moc_4_2026/product_detail_screen/product_detail_screen.dart';
@@ -13,33 +15,36 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        colorSchemeSeed: Colors.deepPurple,
-        useMaterial3: true,
-        appBarTheme: const AppBarTheme(
-          centerTitle: true,
+    return BlocProvider(
+      create: (context) => ProductsBloc(),
+      child: MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+          colorSchemeSeed: Colors.deepPurple,
+          useMaterial3: true,
+          appBarTheme: const AppBarTheme(
+            centerTitle: true,
+          ),
         ),
+        routes: {
+          '/': (context) => const ProductsScreen(),
+        },
+        onGenerateRoute: (settings) {
+          Widget page = Container();
+
+          switch (settings.name) {
+            case '/productDetailScreen':
+              final param = settings.arguments;
+              if (param is Product) {
+                page = ProductDetailScreen(product: param);
+              }
+            case '/cartScreen':
+              page = const CartScreen();
+          }
+
+          return MaterialPageRoute(builder: (context) => page);
+        },
       ),
-      routes: {
-        '/': (context) => const ProductsScreen(),
-      },
-      onGenerateRoute: (settings) {
-        Widget page = Container();
-
-        switch (settings.name) {
-          case '/productDetailScreen':
-            final param = settings.arguments;
-            if (param is Product) {
-              page = ProductDetailScreen(product: param);
-            }
-          case '/cartScreen':
-            page = const CartScreen();
-        }
-
-        return MaterialPageRoute(builder: (context) => page);
-      },
     );
   }
 }

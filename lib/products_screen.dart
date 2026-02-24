@@ -1,7 +1,6 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moc_4_2026/blocs/products_bloc/products_bloc.dart';
 import 'package:moc_4_2026/cart_screen/cart_screen.dart';
 import 'package:moc_4_2026/models/product.dart';
 import 'package:moc_4_2026/product_detail_screen/product_detail_screen.dart';
@@ -15,10 +14,6 @@ class ProductsScreen extends StatefulWidget {
 }
 
 class _ProductsScreenState extends State<ProductsScreen> {
-  List<Product> _products = [];
-  bool _isLoading = true;
-  String? _error;
-
   @override
   void initState() {
     super.initState();
@@ -26,35 +21,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   Future<void> _fetchProducts() async {
-    setState(() {
-      _isLoading = true;
-      _error = null;
-    });
-
-    try {
-      final response = await http.get(
-        Uri.parse('https://dummyjson.com/products'),
-      );
-
-      if (response.statusCode == 200) {
-        final json = jsonDecode(response.body) as Map<String, dynamic>;
-        final productsJson = json['products'] as List<dynamic>;
-        setState(() {
-          _products = productsJson.map((e) => Product.fromJson(e as Map<String, dynamic>)).toList();
-          _isLoading = false;
-        });
-      } else {
-        setState(() {
-          _error = 'Error ${response.statusCode}';
-          _isLoading = false;
-        });
-      }
-    } catch (e) {
-      setState(() {
-        _error = e.toString();
-        _isLoading = false;
-      });
-    }
+    final productsBloc = BlocProvider.of<ProductsBloc>(context);
+    productsBloc.add(GetProducts());
   }
 
   @override
@@ -75,70 +43,68 @@ class _ProductsScreenState extends State<ProductsScreen> {
           ),
         ],
       ),
-      body: _buildBody(),
-    );
-  }
-
-  Widget _buildBody() {
-    if (_isLoading) return _buildLoading();
-    if (_error != null) return _buildError(_error!);
-    return _buildList();
-  }
-
-  Widget _buildLoading() {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
-  }
-
-  Widget _buildError(String message) {
-    return Center(
-      child: Padding(
-        padding: const EdgeInsets.all(32),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              Icons.error_outline,
-              size: 64,
-              color: Theme.of(context).colorScheme.error,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              'Oops, something went wrong!',
-              style: Theme.of(context).textTheme.titleMedium,
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 8),
-            Text(
-              _error!,
-              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-              textAlign: TextAlign.center,
-            ),
-            const SizedBox(height: 24),
-            FilledButton.tonalIcon(
-              onPressed: _fetchProducts,
-              icon: const Icon(Icons.refresh),
-              label: const Text('Retry'),
-            ),
-          ],
-        ),
+      body: BlocBuilder<ProductsBloc, ProductsState>(
+        builder: (context, state) {
+          return _buildList(state.products);
+        },
       ),
     );
   }
 
-  Widget _buildList() {
+  // Widget _buildLoading() {
+  //   return const Center(
+  //     child: CircularProgressIndicator(),
+  //   );
+  // }
+  //
+  // Widget _buildError(String message) {
+  //   return Center(
+  //     child: Padding(
+  //       padding: const EdgeInsets.all(32),
+  //       child: Column(
+  //         mainAxisSize: MainAxisSize.min,
+  //         children: [
+  //           Icon(
+  //             Icons.error_outline,
+  //             size: 64,
+  //             color: Theme.of(context).colorScheme.error,
+  //           ),
+  //           const SizedBox(height: 16),
+  //           Text(
+  //             'Oops, something went wrong!',
+  //             style: Theme.of(context).textTheme.titleMedium,
+  //             textAlign: TextAlign.center,
+  //           ),
+  //           const SizedBox(height: 8),
+  //           Text(
+  //             _error!,
+  //             style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+  //               color: Theme.of(context).colorScheme.onSurfaceVariant,
+  //             ),
+  //             textAlign: TextAlign.center,
+  //           ),
+  //           const SizedBox(height: 24),
+  //           FilledButton.tonalIcon(
+  //             onPressed: _fetchProducts,
+  //             icon: const Icon(Icons.refresh),
+  //             label: const Text('Retry'),
+  //           ),
+  //         ],
+  //       ),
+  //     ),
+  //   );
+  // }
+
+  Widget _buildList(List<Product> produtcs) {
     return ListView.separated(
       padding: const EdgeInsets.symmetric(
         vertical: 12,
         horizontal: 16,
       ),
-      itemCount: _products.length,
+      itemCount: produtcs.length,
       separatorBuilder: (context, index) => const SizedBox(height: 10),
       itemBuilder: (context, index) {
-        final product = _products[index];
+        final product = produtcs[index];
         return ProductListItem(
           product: product,
           onTap: () => _onProductTap(product),
