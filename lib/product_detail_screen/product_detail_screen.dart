@@ -88,7 +88,16 @@ class ProductDetailScreen extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 height: 56,
-                child: BlocBuilder<CartBloc, CartState>(
+                child: BlocConsumer<CartBloc, CartState>(
+                  listener: (context, state) {
+                    if (state.status == CartStatus.errorAddingProduct) {
+                      _showError(context);
+                    }
+
+                    if (state.status == CartStatus.success) {
+                      Navigator.of(context).pop();
+                    }
+                  },
                   builder: (context, state) {
                     final loading = state.status == CartStatus.addingProduct;
                     return FilledButton.icon(
