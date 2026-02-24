@@ -88,12 +88,18 @@ class ProductDetailScreen extends StatelessWidget {
               child: SizedBox(
                 width: double.infinity,
                 height: 56,
-                child: FilledButton.icon(
-                  onPressed: () {
-                    BlocProvider.of<CartBloc>(context).add(AddToCart(product));
+                child: BlocBuilder<CartBloc, CartState>(
+                  builder: (context, state) {
+                    final loading = state.status == CartStatus.addingProduct;
+                    return FilledButton.icon(
+                      onPressed: () {
+                        if (loading) return;
+                        BlocProvider.of<CartBloc>(context).add(AddToCart(product));
+                      },
+                      icon: const Icon(Icons.add_shopping_cart),
+                      label: Text(loading ? 'Adding...' : 'Add to cart'),
+                    );
                   },
-                  icon: const Icon(Icons.add_shopping_cart),
-                  label: const Text('Add to cart'),
                 ),
               ),
             ),

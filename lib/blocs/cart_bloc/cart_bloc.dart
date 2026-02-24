@@ -13,6 +13,21 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   Future<void> _onAddToCart(AddToCart event, Emitter<CartState> emit) async {
     final product = event.product;
     final actualProducts = state.products;
-    emit(CartState(products: [...actualProducts, product]));
+
+    emit(
+      CartState(
+        status: CartStatus.addingProduct,
+        products: actualProducts,
+      ),
+    );
+
+    await Future.delayed(const Duration(seconds: 4));
+
+    emit(
+      CartState(
+        status: CartStatus.success,
+        products: [...actualProducts, product],
+      ),
+    );
   }
 }
