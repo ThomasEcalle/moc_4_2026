@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moc_4_2026/blocs/cart_bloc/cart_bloc.dart';
 import 'package:moc_4_2026/blocs/products_bloc/products_bloc.dart';
 import 'package:moc_4_2026/cart_screen/cart_screen.dart';
 import 'package:moc_4_2026/models/product.dart';
@@ -33,12 +34,23 @@ class _ProductsScreenState extends State<ProductsScreen> {
         actions: [
           Padding(
             padding: const EdgeInsets.only(right: 8),
-            child: IconButton(
-              onPressed: _onCartTap,
-              icon: Badge(
-                label: const Text('0'),
-                child: const Icon(Icons.shopping_cart_outlined),
-              ),
+            child: BlocBuilder<CartBloc, CartState>(
+              buildWhen: (prev, next) {
+                final previousProductsLength = prev.products.length;
+                final nextProductsLength = next.products.length;
+                return previousProductsLength != nextProductsLength;
+              },
+              builder: (context, state) {
+                print('Building Cart Icon');
+                final nbItems = state.products.length;
+                return IconButton(
+                  onPressed: _onCartTap,
+                  icon: Badge(
+                    label: Text('$nbItems'),
+                    child: const Icon(Icons.shopping_cart_outlined),
+                  ),
+                );
+              },
             ),
           ),
         ],

@@ -21,7 +21,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
       ),
     );
 
-    await Future.delayed(const Duration(seconds: 4));
+    await Future.delayed(const Duration(seconds: 6));
 
     emit(
       CartState(

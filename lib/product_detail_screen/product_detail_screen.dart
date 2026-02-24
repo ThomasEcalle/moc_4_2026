@@ -108,4 +108,15 @@ class ProductDetailScreen extends StatelessWidget {
       ),
     );
   }
+
+  void _showError(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Error !'),
+        );
+      },
+    );
+  }
 }
