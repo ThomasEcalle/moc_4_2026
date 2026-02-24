@@ -22,7 +22,8 @@ class _ProductsScreenState extends State<ProductsScreen> {
   }
 
   Future<void> _fetchProducts() async {
-    final productsBloc = BlocProvider.of<ProductsBloc>(context);
+    //final productsBloc = BlocProvider.of<ProductsBloc>(context);
+    final productsBloc = context.read<ProductsBloc>();
     productsBloc.add(GetProducts());
   }
 

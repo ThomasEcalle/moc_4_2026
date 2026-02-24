@@ -6,8 +6,10 @@ import 'package:moc_4_2026/cart_screen/cart_screen.dart';
 import 'package:moc_4_2026/models/product.dart';
 import 'package:moc_4_2026/product_detail_screen/product_detail_screen.dart';
 import 'package:moc_4_2026/products_screen.dart';
+import 'package:moc_4_2026/string_extensions.dart';
 
 void main() {
+  'toto'.areAllLettersA();
   runApp(const MyApp());
 }
 
