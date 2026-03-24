@@ -18,9 +18,9 @@ class CartScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text('Cart'),
       ),
-      body: BlocBuilder<CartBloc, CartState>(
-        builder: (context, state) {
-          final products = state.products;
+      body: BlocSelector<CartBloc, CartState, List<Product>>(
+        selector: (state) => state.products,
+        builder: (context, products) {
           if (products.isEmpty) return _buildEmpty(context);
           return _buildList(context, products);
         },

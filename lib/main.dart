@@ -6,6 +6,7 @@ import 'package:moc_4_2026/cart_screen/cart_screen.dart';
 import 'package:moc_4_2026/models/product.dart';
 import 'package:moc_4_2026/product_detail_screen/product_detail_screen.dart';
 import 'package:moc_4_2026/products_screen.dart';
+import 'package:moc_4_2026/repositories/products_data_source/fake_products_data_source.dart';
 import 'package:moc_4_2026/string_extensions.dart';
 
 void main() {
@@ -21,7 +22,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => ProductsBloc(),
+          create: (context) => ProductsBloc(
+            productsDataSource: FakeProductsDataSource(),
+          ),
         ),
         BlocProvider(
           create: (context) => CartBloc(),
