@@ -6,9 +6,12 @@ import 'package:moc_4_2026/cart_screen/cart_screen.dart';
 import 'package:moc_4_2026/models/product.dart';
 import 'package:moc_4_2026/product_detail_screen/product_detail_screen.dart';
 import 'package:moc_4_2026/products_screen.dart';
-import 'package:moc_4_2026/repositories/products_data_source/api_products_data_source.dart';
-import 'package:moc_4_2026/repositories/products_repository.dart';
+import 'package:moc_4_2026/repositories/cart_repository/cart_data_source/fake_cart_data_source.dart';
+import 'package:moc_4_2026/repositories/cart_repository/cart_repository.dart';
+import 'package:moc_4_2026/repositories/products_repository/products_repository.dart';
 import 'package:moc_4_2026/string_extensions.dart';
+
+import 'repositories/products_repository/products_data_source/api_products_data_source.dart';
 
 void main() {
   'toto'.areAllLettersA();
@@ -30,7 +33,11 @@ class MyApp extends StatelessWidget {
           ),
         ),
         BlocProvider(
-          create: (context) => CartBloc(),
+          create: (context) => CartBloc(
+            cartRepository: CartRepository(
+              dataSource: FakeCartDataSource(),
+            ),
+          ),
         ),
       ],
       child: MaterialApp(

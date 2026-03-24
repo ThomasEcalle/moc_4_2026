@@ -1,5 +1,6 @@
 import 'package:moc_4_2026/models/product.dart';
-import 'package:moc_4_2026/repositories/products_data_source/products_data_source.dart';
+
+import 'products_data_source.dart';
 
 final class FakeProductsDataSource extends ProductsDataSource {
   @override

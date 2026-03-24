@@ -1,7 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:moc_4_2026/models/product.dart';
-import 'package:moc_4_2026/repositories/products_repository.dart';
+import 'package:moc_4_2026/repositories/products_repository/products_repository.dart';
 
 part 'products_event.dart';
 part 'products_state.dart';
