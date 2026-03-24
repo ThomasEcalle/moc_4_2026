@@ -1,19 +1,19 @@
 import 'package:bloc/bloc.dart';
 import 'package:meta/meta.dart';
 import 'package:moc_4_2026/models/product.dart';
-import 'package:moc_4_2026/repositories/products_data_source/products_data_source.dart';
+import 'package:moc_4_2026/repositories/products_repository.dart';
 
 part 'products_event.dart';
 part 'products_state.dart';
 
 class ProductsBloc extends Bloc<ProductsEvent, ProductsState> {
-  final ProductsDataSource productsDataSource;
+  final ProductsRepository productsRepository;
 
-  ProductsBloc({required this.productsDataSource}) : super(ProductsState()) {
+  ProductsBloc({required this.productsRepository}) : super(ProductsState()) {
     on<GetProducts>((event, emit) async {
       emit(ProductsState(status: ProductsStatus.loading));
       try {
-        final products = await productsDataSource.getProducts();
+        final products = await productsRepository.getProducts();
         emit(ProductsState(products: products, status: ProductsStatus.success));
       } catch (error) {
         //TODO: Handle error
